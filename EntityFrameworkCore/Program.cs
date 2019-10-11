@@ -105,7 +105,7 @@ namespace EntityFrameworkCore
                     Console.WriteLine($"    {onePost.Tag.Text}");
                 }
 
-                var tags = context.Tags.Include(e => e.PostTags).ThenInclude(e => e.Post).ToList();
+                var tags = context.Tags.Include(e => e.PostTags).ThenInclude(e => e.Post).Where(x => x.TagId == 1).ToList();
                 foreach (var oneTag in tags)
                 {
                     var oldPostTag = oneTag.PostTags.Where(e => e.Tag.TagId == oneTag.TagId).ToList();
