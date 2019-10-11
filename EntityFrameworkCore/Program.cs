@@ -80,30 +80,35 @@ namespace EntityFrameworkCore
                 //Não chame EnsureCreated() antes de Migrate(). 
                 //O EnsureCreated() ignora as Migrações para criar o esquema e causa falha no Migrate().
 
-                //context.Database.EnsureDeleted();
-                //context.Database.EnsureCreated();
+                context.Database.EnsureDeleted();
+                context.Database.EnsureCreated();
 
-                //var tag = new Tag { Text = "Primeira tag" };
-                //context.Add(tag);
+                var tag = new Tag { Text = "Primeira tag" };
+                context.Add(tag);
 
-                //var post = new Post { Title = "Primeiro post" };
-                //var postTag = new PostTag { Post = post, Tag = tag };
-                //context.Add(postTag);
+                var post = new Post { Title = "Primeiro post" };
+                var postTag = new PostTag { Post = post, Tag = tag };
+                context.Add(postTag);
 
-                //post = new Post { Title = "Segundo post" };
-                //postTag = new PostTag { Post = post, Tag = tag };
-                //context.Add(postTag);
+                post = new Post { Title = "Segundo post" };
+                postTag = new PostTag { Post = post, Tag = tag };
+                context.Add(postTag);
+
+                context.SaveChanges();
+
+                Console.WriteLine("Consultar no banco e pressione ENTER");
+                Console.ReadKey();
 
                 var posts = context.Posts.Include(e => e.PostTags).ThenInclude(e => e.Tag).FirstOrDefault(e => e.PostId == 1);
-                foreach (var post in posts.PostTags)
+                foreach (var onePost in posts.PostTags)
                 {
-                    Console.WriteLine($"    {post.Tag.Text}");
+                    Console.WriteLine($"    {onePost.Tag.Text}");
                 }
 
                 var tags = context.Tags.Include(e => e.PostTags).ThenInclude(e => e.Post).ToList();
-                foreach (var tag in tags)
+                foreach (var oneTag in tags)
                 {
-                    var oldPostTag = tag.PostTags.Where(e => e.Tag.TagId == tag.TagId).ToList();
+                    var oldPostTag = oneTag.PostTags.Where(e => e.Tag.TagId == oneTag.TagId).ToList();
                     if (oldPostTag != null)
                     {
                         context.RemoveRange(oldPostTag);
@@ -113,7 +118,7 @@ namespace EntityFrameworkCore
                 context.SaveChanges();
             }
 
-            Console.WriteLine();
+            Console.WriteLine("Finalizado");
         }
 
         private static List<Post> LoadAndDisplayPosts(BloggingContext context, string message)
