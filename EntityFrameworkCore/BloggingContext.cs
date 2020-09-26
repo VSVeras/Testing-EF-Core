@@ -15,17 +15,17 @@ namespace EntityFrameworkCore
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<PostTag>()
-                .HasKey(pt => new { pt.PostId, pt.TagId });
+                .HasKey(p => new { p.PostId, p.TagId });
 
             modelBuilder.Entity<PostTag>()
-                .HasOne(pt => pt.Post)
+                .HasOne(p => p.Post)
                 .WithMany(p => p.PostTags)
-                .HasForeignKey(pt => pt.PostId);
+                .HasForeignKey(p => p.PostId);
 
             modelBuilder.Entity<PostTag>()
-                .HasOne(pt => pt.Tag)
-                .WithMany(t => t.PostTags)
-                .HasForeignKey(pt => pt.TagId);
+                .HasOne(p => p.Tag)
+                .WithMany(p => p.PostTags)
+                .HasForeignKey(p => p.TagId);
         }
     }
 

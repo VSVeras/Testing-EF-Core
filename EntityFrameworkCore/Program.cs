@@ -96,7 +96,7 @@ namespace EntityFrameworkCore
 
                 context.SaveChanges();
 
-                Console.WriteLine("Consultar no banco e pressione ENTER");
+                Console.WriteLine("Consultar no banco - pressione ENTER");
                 Console.ReadKey();
 
                 var posts = context.Posts.Include(e => e.PostTags).ThenInclude(e => e.Tag).FirstOrDefault(e => e.PostId == 1);
